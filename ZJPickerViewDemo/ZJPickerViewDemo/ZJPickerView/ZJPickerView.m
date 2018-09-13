@@ -69,7 +69,7 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
 @property (nonatomic, assign) BOOL isAnimationShow; // show pickerView is need Animation, default YES
 @property (nonatomic, assign) BOOL isSettedSelectRowLineBackgroundColor; // is setted select row top and bottom line backgroundColor, default NO
 @property (nonatomic, assign) CGFloat backgroundAlpha; // background alpha, default 0.5(0.0~1.0)
-@property (nonatomic, copy) void(^completion)(NSString * _Nullable  selectContent); // select content
+@property (nonatomic, copy) void(^completion)(NSArray * _Nullable  selectContents); // select content
 
 // subviews
 @property (nonatomic, strong) UIView *backgroundView;
@@ -301,17 +301,23 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
     
     // click sure
     if (sender.tag == 1) {
-        NSMutableString *selectString = [[NSMutableString alloc] init];
+//        NSMutableString *selectString = [[NSMutableString alloc] init];
+        NSMutableArray *selectItems = [NSMutableArray new];
         for (NSUInteger i = 0; i < self.component; i++) {
-            [selectString appendString:[self pickerView:self.pickerView titleForRow:[self.pickerView selectedRowInComponent:i] forComponent:i]];
-            if (i != self.component - 1) { // 多行用 "," 分割
-                [selectString appendString:@","];
-            }
+            NSMutableDictionary *tmpDict = [[NSMutableDictionary alloc] init];
+            [tmpDict setObject:@([self.pickerView selectedRowInComponent:i]) forKey:@"row"];
+            [tmpDict setObject:[self pickerView:self.pickerView titleForRow:[self.pickerView selectedRowInComponent:i] forComponent:i] forKey:@"value"];
+//            [selectString appendString:[self pickerView:self.pickerView titleForRow:[self.pickerView selectedRowInComponent:i] forComponent:i]];
+//            if (i != self.component - 1) { // 多行用 "," 分割
+//                [selectString appendString:@","];
+//            }
+            
+            [selectItems addObject:tmpDict];
         }
         
         // completion callback
         if (self.completion) {
-           self.completion(selectString);
+           self.completion(selectItems);
         }
     }
 }
@@ -327,7 +333,7 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
 #pragma mark - show & hide method
 + (void)zj_showWithDataList:(nonnull NSArray *)dataList
                propertyDict:(nullable NSDictionary *)propertyDict
-                 completion:(nullable void(^)(NSString * _Nullable selectContent))completion
+                 completion:(nullable void(^)(NSArray * _Nullable selectContent))completion
 {
     // no data
     if (!dataList || dataList.count == 0) {
