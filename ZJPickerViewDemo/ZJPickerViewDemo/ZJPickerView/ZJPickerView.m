@@ -333,7 +333,7 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
 #pragma mark - show & hide method
 + (void)zj_showWithDataList:(nonnull NSArray *)dataList
                propertyDict:(nullable NSDictionary *)propertyDict
-                 completion:(nullable void(^)(NSArray * _Nullable selectContent))completion
+                 completion:(nullable void(^)(NSArray * _Nullable selectContents))completion
 {
     // no data
     if (!dataList || dataList.count == 0) {

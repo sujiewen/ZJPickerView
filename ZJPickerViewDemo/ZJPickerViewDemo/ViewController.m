@@ -102,18 +102,18 @@
     
     // 2.Show（显示）
     __weak typeof(_selectContentLabel) weak_selectContentLabel = _selectContentLabel;
-    [ZJPickerView zj_showWithDataList:dataList propertyDict:propertyDict completion:^(NSString *selectContent) {
-        NSLog(@"ZJPickerView log tip：---> selectContent:%@", selectContent);
+    [ZJPickerView zj_showWithDataList:dataList propertyDict:propertyDict completion:^(NSArray *selectContents) {
+        NSLog(@"ZJPickerView log tip：---> selectContent:%@", selectContents);
 
-        // show select content
-        NSArray *selectStrings = [selectContent componentsSeparatedByString:@","];
-        NSMutableString *selectStringCollection = [[NSMutableString alloc] initWithString:@"选择内容："];
-        [selectStrings enumerateObjectsUsingBlock:^(NSString *selectString, NSUInteger idx, BOOL * _Nonnull stop) {
-            if (selectString.length && ![selectString isEqualToString:@""]) {
-                [selectStringCollection appendString:selectString];
-            }
-        }];
-        weak_selectContentLabel.text = selectStringCollection;
+//        // show select content
+//        NSArray *selectStrings = [selectContent componentsSeparatedByString:@","];
+//        NSMutableString *selectStringCollection = [[NSMutableString alloc] initWithString:@"选择内容："];
+//        [selectStrings enumerateObjectsUsingBlock:^(NSString *selectString, NSUInteger idx, BOOL * _Nonnull stop) {
+//            if (selectString.length && ![selectString isEqualToString:@""]) {
+//                [selectStringCollection appendString:selectString];
+//            }
+//        }];
+//        weak_selectContentLabel.text = selectStringCollection;
     }];
 }
 

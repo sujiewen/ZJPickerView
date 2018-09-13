@@ -60,5 +60,5 @@ extern NSString * _Nonnull const ZJPickerViewPropertyBackgroundAlphaKey;  // bac
  */
 + (void)zj_showWithDataList:(nonnull NSArray *)dataList
                propertyDict:(nullable NSDictionary *)propertyDict
-                 completion:(nullable void(^)(NSString * _Nullable selectContent))completion;
+                 completion:(nullable void(^)(NSArray * _Nullable selectContents))completion;
 @end
