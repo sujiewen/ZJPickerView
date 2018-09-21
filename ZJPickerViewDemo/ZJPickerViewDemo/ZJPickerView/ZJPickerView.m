@@ -483,7 +483,15 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
             } else if ([key isEqualToString:ZJPickerViewPropertySureBtnTitleKey]) {
                 [self.sureBtn setTitle:obj forState:UIControlStateNormal];
             } else if ([key isEqualToString:ZJPickerViewPropertyTipLabelTextKey]) {
-                self.tipLabel.text = obj;
+                if([obj isKindOfClass:[NSArray class]]) {
+                    NSArray *tmpObj = obj;
+                    if([tmpObj count] > 0) {
+                        self.tipLabel.text = [tmpObj componentsJoinedByString:@""];
+                    }
+                }
+                else {
+                    self.tipLabel.text = obj;
+                }
             } else if ([key isEqualToString:ZJPickerViewPropertyCanceBtnTitleColorKey]) {
                 [self.canceBtn setTitleColor:obj forState:UIControlStateNormal];
             } else if ([key isEqualToString:ZJPickerViewPropertySureBtnTitleColorKey]) {
@@ -535,8 +543,8 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
 
 - (void)scrollToSelectedRow
 {
-    NSString *selectedContent = self.propertyDict[ZJPickerViewPropertyTipLabelTextKey];
-    if (selectedContent.length && ![selectedContent isEqualToString:@""]) {
+    NSArray *selectedContent = self.propertyDict[ZJPickerViewPropertyTipLabelTextKey];
+    if (selectedContent != nil && selectedContent.count > 0) {
         __weak typeof(self) weakself = self;
         NSMutableArray *tempSelectedRowArray = [NSMutableArray arrayWithCapacity:self.component];
         for (NSUInteger i = 0; i < self.component; i++) {
@@ -550,8 +558,8 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
                         title = [NSString stringWithFormat:@"%@", obj];
                     }
                     if (![title isEqualToString:@""]) {
-                        NSRange range = [selectedContent rangeOfString:title];
-                        if (range.location != NSNotFound) {
+                        BOOL flag = [selectedContent containsObject:title];
+                        if (flag) {
                             [tempSelectedRowArray addObject:@(idx)];
                             [weakself.pickerView reloadComponent:i];
                             [weakself.pickerView selectRow:idx inComponent:i animated:NO];

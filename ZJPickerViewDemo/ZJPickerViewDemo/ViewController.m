@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "ZJPickerView.h"
+#import "ZJPickerView/ZJPickerView.h"
 #import "UIColor+ZJ.h"
 
 @interface ViewController ()<UITableViewDataSource, UITableViewDelegate>
@@ -15,11 +15,21 @@
     UILabel *_selectContentLabel;
     UITableView *_tableView;
     NSArray *_dataList;
+    NSMutableArray *_selectData;
 }
 
 @end
 
 @implementation ViewController
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self) {
+        _selectData = [NSMutableArray new];
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -78,11 +88,14 @@
 #pragma mark 显示选择控制器
 - (void)showPickerViewWithDataList:(NSArray *)dataList
 {
+    if(_selectData == nil) {
+        _selectData = [NSMutableArray new];
+    }
     // 1.Custom propery（自定义属性）
     NSDictionary *propertyDict = @{
 //                                   ZJPickerViewPropertyCanceBtnTitleKey : @"取消",
 //                                   ZJPickerViewPropertySureBtnTitleKey  : @"确定",
-                                   ZJPickerViewPropertyTipLabelTextKey  : [_selectContentLabel.text substringFromIndex:5], // @"提示内容"
+                                  ZJPickerViewPropertyTipLabelTextKey  :_selectData, // @"提示内容"
                                    ZJPickerViewPropertyCanceBtnTitleColorKey : [UIColor zj_colorWithHexString:@"#A9A9A9"],
                                    ZJPickerViewPropertySureBtnTitleColorKey : [UIColor zj_colorWithHexString:@"#FF6347"],
                                    ZJPickerViewPropertyTipLabelTextColorKey : [UIColor zj_colorWithHexString:@"#231F20"],
@@ -104,9 +117,19 @@
     __weak typeof(_selectContentLabel) weak_selectContentLabel = _selectContentLabel;
     [ZJPickerView zj_showWithDataList:dataList propertyDict:propertyDict completion:^(NSArray *selectContents) {
         NSLog(@"ZJPickerView log tip：---> selectContent:%@", selectContents);
-
-//        // show select content
-//        NSArray *selectStrings = [selectContent componentsSeparatedByString:@","];
+        [_selectData removeAllObjects];
+        NSMutableString *strV = [NSMutableString new];
+        for(NSDictionary *item in selectContents) {
+            [strV appendFormat:@"%@,",item[@"value"]];
+            [_selectData addObject:item[@"value"]];
+        }
+        
+        NSString *tmpStrV = strV;
+        tmpStrV = [tmpStrV substringToIndex:(tmpStrV.length -1)];
+        weak_selectContentLabel.text = tmpStrV;
+        
+////        // show select content
+//        NSArray *selectStrings = [selectContents componentsSeparatedByString:@","];
 //        NSMutableString *selectStringCollection = [[NSMutableString alloc] initWithString:@"选择内容："];
 //        [selectStrings enumerateObjectsUsingBlock:^(NSString *selectString, NSUInteger idx, BOOL * _Nonnull stop) {
 //            if (selectString.length && ![selectString isEqualToString:@""]) {
@@ -121,7 +144,7 @@
 {
     // 1.选择内容(selected content)
     _selectContentLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 64.0f, self.view.frame.size.width, 44.0f)];
-    _selectContentLabel.text = @"选择内容：";
+    _selectContentLabel.text = @"";
     _selectContentLabel.textColor = [UIColor brownColor];
     _selectContentLabel.font = [UIFont systemFontOfSize:17.0f];
     _selectContentLabel.textAlignment = NSTextAlignmentCenter;
