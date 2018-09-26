@@ -577,6 +577,14 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
             }
         }
     }
+    else {
+        //初始化选中状态
+        for (NSUInteger i = 0; i < self.component; i++) {
+            [self.pickerView reloadComponent:i];
+            [self.pickerView selectRow:0 inComponent:i animated:NO];
+            [self.pickerView reloadComponent:i];
+        }
+    }
 }
 
 - (NSArray *)getDiffLanguageCanceAndSureBtnTitles
