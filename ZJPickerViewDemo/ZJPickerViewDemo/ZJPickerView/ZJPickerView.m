@@ -463,7 +463,8 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
                         if ([obj isKindOfClass:[NSArray class]]) {
                             [tempArray addObjectsFromArray:obj];
                         } else {
-                            [tempArray addObject:obj];
+                            //解决一个string bug
+                            //[tempArray addObject:obj];
                         }
                     }];
                 }
