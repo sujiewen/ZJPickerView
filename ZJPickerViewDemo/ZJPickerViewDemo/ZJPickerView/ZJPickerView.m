@@ -572,7 +572,8 @@ static const CGFloat canceBtnWidth = 68.0f; // cance button or sure button heigh
             }
         }
         
-        if (tempSelectedRowArray.count != self.component) {
+        //兼容数据不一致的情况
+        if (tempSelectedRowArray.count == 0) {
             for (NSUInteger i = 0; i < self.component; i++) {
                 [self.pickerView selectRow:0 inComponent:i animated:NO];
             }
